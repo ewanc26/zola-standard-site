@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="{{ lang | default(value="en") }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  {# ── Title ────────────────────────────────────────────────────────────── #}
+  <title>{% block title %}{{ config.title }}{% endblock %}</title>
+
+  {# ── Description ──────────────────────────────────────────────────────── #}
+  <meta name="description" content="{% block description %}{{ config.description }}{% endblock %}">
+
+  {# ── Open Graph ───────────────────────────────────────────────────────── #}
+  <meta property="og:title"       content="{% block og_title %}{{ config.title }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ config.description }}{% endblock %}">
+  <meta property="og:type"        content="{% block og_type %}website{% endblock %}">
+  <meta property="og:url"         content="{% block og_url %}{{ config.base_url }}{% endblock %}">
+  {% block og_image %}{% endblock %}
+
+  {# ── Feed ─────────────────────────────────────────────────────────────── #}
+  {% if config.generate_feeds %}
+  <link rel="alternate" type="application/atom+xml"
+        title="{{ config.title }}" href="{{ get_url(path="atom.xml") }}">
+  {% endif %}
+
+  {# ─────────────────────────────────────────────────────────────────────── #}
+  {# Standard.site — AT Protocol long-form publishing integration           #}
+  {# https://standard.site/docs/verification/                               #}
+  {# ─────────────────────────────────────────────────────────────────────── #}
+
+  {# Publication discovery hint (optional; verification is via /.well-known) #}
+  {% if config.extra.standard_site_discovery_hint
+     and config.extra.standard_site_publication_at_uri %}
+  <link rel="site.standard.publication"
+        href="{{ config.extra.standard_site_publication_at_uri }}">
+  {% endif %}
+
+  {# Document verification link — emitted per-page by page.html / section.html #}
+  {% block standard_site_document %}{% endblock %}
+
+  {# ── Stylesheet ───────────────────────────────────────────────────────── #}
+  {% block stylesheets %}{% endblock %}
+
+  {# ── Extra head content ───────────────────────────────────────────────── #}
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+  {# ── Site header ──────────────────────────────────────────────────────── #}
+  {% block header %}
+  <header>
+    <a href="{{ get_url(path="/") }}" class="site-title">{{ config.title }}</a>
+    {% if config.extra.nav_items %}
+    <nav aria-label="Main navigation">
+      {% for item in config.extra.nav_items %}
+      <a href="{{ item.url }}">{{ item.name }}</a>
+      {% endfor %}
+    </nav>
+    {% endif %}
+  </header>
+  {% endblock %}
+
+  {# ── Main content ─────────────────────────────────────────────────────── #}
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  {# ── Footer ───────────────────────────────────────────────────────────── #}
+  {% block footer %}
+  <footer>
+    <p>&copy; {{ now() | date(format="%Y") }} {{ config.extra.author | default(value=config.title) }}</p>
+  </footer>
+  {% endblock %}
+
+  {% block scripts %}{% endblock %}
+
+</body>
+</html>
