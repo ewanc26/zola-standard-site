@@ -1,0 +1,63 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Zola site configuration
+# https://www.getzola.org/documentation/getting-started/configuration/
+# ─────────────────────────────────────────────────────────────────────────────
+
+base_url      = "https://example.com"
+title         = "My Site"
+description   = "A personal blog."
+
+compile_sass    = false
+minify_html     = false
+generate_feeds  = true
+feed_filenames  = ["atom.xml"]
+
+taxonomies = [
+  { name = "tags", feed = true },
+]
+
+[markdown]
+highlight_code  = true
+highlight_theme = "base16-ocean-dark"
+smart_punctuation = true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Extra — site-wide template variables
+# ─────────────────────────────────────────────────────────────────────────────
+[extra]
+
+# Site author name (used in footer and meta tags)
+author = "Your Name"
+
+# Optional nav links rendered in the site header
+nav_items = [
+  { name = "Posts", url = "/posts" },
+  { name = "About", url = "/about" },
+]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Standard.site — AT Protocol long-form publishing
+# https://standard.site/docs/introduction/
+#
+# 1. Create a site.standard.publication record on your PDS.
+# 2. Fill in the three fields below.
+# 3. Update static/.well-known/site.standard.publication with the same AT-URI.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Your AT Protocol DID. Supports both did:plc and did:web.
+# Example: "did:plc:ofrbh253gwicbkc5nktqepol"
+atproto_did = "did:plc:YOURDIIDHERE"
+
+# The rkey of your site.standard.publication record.
+# "self" is the conventional default for a root publication.
+standard_site_publication_rkey = "self"
+
+# Full AT-URI of the publication record.
+# Keep this in sync with atproto_did + standard_site_publication_rkey above.
+# Format: at://{did}/site.standard.publication/{rkey}
+standard_site_publication_at_uri = "at://did:plc:YOURDIIDHERE/site.standard.publication/self"
+
+# Whether to emit the optional publication discovery <link> hint in every
+# page <head>. This is a hint for crawlers — verification always goes through
+# /.well-known/site.standard.publication, not this tag.
+standard_site_discovery_hint = true
