@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="intro">
+  {{ section.content | safe }}
+</section>
+
+{% if section.pages %}
+<section class="posts">
+  <h2>Recent posts</h2>
+  <ul>
+    {% for page in section.pages | sort(attribute="date") | reverse %}
+    <li>
+      <a href="{{ page.permalink }}">{{ page.title }}</a>
+      {% if page.date %}
+      <time datetime="{{ page.date | date(format="%Y-%m-%dT%H:%M:%SZ") }}">
+        {{ page.date | date(format="%d %B %Y") }}
+      </time>
+      {% endif %}
+      {% if page.description %}
+      <p>{{ page.description }}</p>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock %}
