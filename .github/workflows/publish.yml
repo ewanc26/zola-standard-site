@@ -10,16 +10,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 1. Publish new/changed posts to AT Protocol via Sequoia
+      # 1. Publish to AT Protocol via Sequoia (skips silently if not configured)
       - uses: actions/setup-node@v4
         with: { node-version: "22" }
-      - run: npx sequoia-cli publish
+      - name: Publish to AT Protocol
+        run: |
+          if [ -f sequoia.json ] && [ -n "$ATPROTO_HANDLE" ] && [ -n "$ATPROTO_APP_PASSWORD" ]; then
+            npx sequoia-cli publish
+            echo "SEQUOIA_RAN=true" >> $GITHUB_ENV
+          else
+            echo "Sequoia not configured — skipping. Run 'npx sequoia-cli init' locally to set up."
+            echo "SEQUOIA_RAN=false" >> $GITHUB_ENV
+          fi
         env:
           ATPROTO_HANDLE: ${{ secrets.ATPROTO_HANDLE }}
           ATPROTO_APP_PASSWORD: ${{ secrets.ATPROTO_APP_PASSWORD }}
 
-      # 2. Commit any frontmatter changes Sequoia wrote back
+      # 2. Commit any frontmatter changes Sequoia wrote back (only if it ran)
       - uses: stefanzweifel/git-auto-commit-action@v5
+        if: env.SEQUOIA_RAN == 'true'
         with:
           commit_message: "sequoia: update document rkeys"
           file_pattern: "content/"
@@ -29,7 +38,7 @@ jobs:
         with: { tool: zola }
       - run: zola build
 
-      # 4. Deploy (add your deploy step here — e.g. Vercel, Cloudflare Pages, rsync)
+      # 4. Deploy — uncomment and configure your deploy target
       # - uses: peaceiris/actions-gh-pages@v4
       #   with:
       #     github_token: ${{ secrets.GITHUB_TOKEN }}
