@@ -1,4 +1,5 @@
 +++
+# Homepage content root — rendered by templates/index.html
 title = "Home"
 sort_by = "date"
 template = "index.html"

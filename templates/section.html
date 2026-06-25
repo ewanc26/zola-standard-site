@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{# ── Section listing — index page for /posts and other content sections ── #}
+
 {% block title %}{{ section.title | default(value=config.title) }} | {{ config.title }}{% endblock %}
 {% block description %}{{ section.description | default(value=config.description) }}{% endblock %}
 
