@@ -2,6 +2,8 @@
 
 A Zola theme for long-form publishing on AT Protocol. Committed-dark reading surface, Inter + JetBrains Mono typography, 96 built-in colour themes, and standard.site verification that degrades gracefully.
 
+!![Zola Standard Site screenshot](static/screenshot.png)
+
 ## Quick start
 
 ```bash
@@ -147,8 +149,6 @@ theme = "gruvbox-dark-medium"
 ## AT Protocol publishing (Sequoia)
 
 This theme is wired for [Sequoia](https://sequoia.pub), the CLI that publishes static Markdown blogs to AT Protocol.
-
-!![Zola Standard Site screenshot](static/screenshot.png)
 
 The handshake:
 
