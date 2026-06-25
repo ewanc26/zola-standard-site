@@ -146,7 +146,11 @@ theme = "gruvbox-dark-medium"
 
 ## AT Protocol publishing (Sequoia)
 
-This theme is wired for [Sequoia](https://sequoia.pub), the CLI that publishes static Markdown blogs to AT Protocol. The handshake:
+This theme is wired for [Sequoia](https://sequoia.pub), the CLI that publishes static Markdown blogs to AT Protocol.
+
+![Sequoia handshake](static/sequoia-handshake.png)
+
+The handshake:
 
 1. **Sequoia writes rkeys** to post frontmatter after creating records on your PDS
 2. **Zola reads them** during build and emits `<link rel="site.standard.document">` tags
