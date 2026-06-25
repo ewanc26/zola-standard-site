@@ -1,0 +1,9 @@
+{
+  "siteUrl": "https://example.com",
+  "contentDir": "content",
+  "publicationUri": "at://did:plc:YOURDIIDHERE/site.standard.publication/self",
+  "frontmatter": {
+    "publishDate": "date",
+    "slugField": "slug"
+  }
+}

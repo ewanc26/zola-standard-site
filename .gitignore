@@ -1,3 +1,5 @@
 public/
 data/
 .DS_Store
+sequoia.json
+.sequoia-state.json

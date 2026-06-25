@@ -67,9 +67,12 @@ Open `http://127.0.0.1:1111`. The site works immediately — all AT Protocol fie
 │   │   └── themes-64.css    # 96-theme colour definitions (generated)
 │   └── og-default.svg       # Reference OG image design
 ├── scripts/
-│   └── generate-themes.mjs  # Theme generator (8 hues × 4 moods × 3 depths)
-├── DESIGN.md                # Visual design system (Stitch format)
-└── PRODUCT.md               # Strategic product brief
+│   └── generate-themes.mjs    # Theme generator (8 hues × 4 moods × 3 depths)
+├── .github/workflows/
+│   └── publish.yml            # CI: Sequoia publish → Zola build → deploy
+├── sequoia.example.json       # Template for Sequoia config
+├── DESIGN.md                  # Visual design system (Stitch format)
+└── PRODUCT.md                 # Strategic product brief
 ```
 
 ## Configuration
@@ -140,6 +143,52 @@ Pick any [Giallo theme](https://github.com/getzola/giallo?tab=readme-ov-file#bui
 [markdown.highlighting]
 theme = "gruvbox-dark-medium"
 ```
+
+## AT Protocol publishing (Sequoia)
+
+This theme is wired for [Sequoia](https://sequoia.pub), the CLI that publishes static Markdown blogs to AT Protocol. The handshake:
+
+1. **Sequoia writes rkeys** to post frontmatter after creating records on your PDS
+2. **Zola reads them** during build and emits `<link rel="site.standard.document">` tags
+3. **AT Protocol indexers** discover the links and surface your content
+
+### Setup
+
+```bash
+# Install and init (creates sequoia.json, registers publication)
+npx sequoia-cli init
+
+# Fill in config.toml ATProto fields with values from sequoia.json
+# atproto_did → your DID
+# standard_site_publication_at_uri → publicationUri from sequoia.json
+
+# Publish posts to AT Protocol
+npx sequoia-cli publish
+```
+
+Sequoia walks `content/`, creates a `site.standard.document` record per post, and writes the rkey back to the post's frontmatter under the `standard_site_document_rkey` field — the exact field our `page.html` template reads.
+
+### CI automation
+
+`.github/workflows/publish.yml` is included — it runs Sequoia before the Zola build on every push to main. Add two repo secrets:
+
+- `ATPROTO_HANDLE` — your Bluesky handle (e.g. `you.bsky.social`)
+- `ATPROTO_APP_PASSWORD` — an app password from Bluesky settings
+
+The workflow commits any rkey changes back to the repo and builds the site.
+
+### How the template uses it
+
+```
+Sequoia writes → page.extra.standard_site_document_rkey = "3lwafzkjqm25s"
+                   ↓
+page.html reads → page.extra.standard_site_document_rkey
+                   ↓
+            emits → <link rel="site.standard.document"
+                         href="at://did:plc:xxx/site.standard.document/3lwafzkjqm25s">
+```
+
+When config values are still placeholders (containing `YOURDIIDHERE`), the link tag is suppressed — nothing breaks.
 
 ## Shortcodes
 

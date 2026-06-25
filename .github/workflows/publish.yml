@@ -1,0 +1,36 @@
+name: Publish
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. Publish new/changed posts to AT Protocol via Sequoia
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - run: npx sequoia-cli publish
+        env:
+          ATPROTO_HANDLE: ${{ secrets.ATPROTO_HANDLE }}
+          ATPROTO_APP_PASSWORD: ${{ secrets.ATPROTO_APP_PASSWORD }}
+
+      # 2. Commit any frontmatter changes Sequoia wrote back
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "sequoia: update document rkeys"
+          file_pattern: "content/"
+
+      # 3. Build the Zola site
+      - uses: taiki-e/install-action@v2
+        with: { tool: zola }
+      - run: zola build
+
+      # 4. Deploy (add your deploy step here — e.g. Vercel, Cloudflare Pages, rsync)
+      # - uses: peaceiris/actions-gh-pages@v4
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./public
