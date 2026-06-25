@@ -1,0 +1,7 @@
+{# Responsive image shortcode. Usage: {{ image(path="img/photo.jpg", alt="Description", class="") }} #}
+{% if path %}
+<figure{% if class %} class="{{ class }}"{% endif %}>
+  <img src="{{ config.base_url | safe }}/{{ path }}" alt="{{ alt | default(value="") }}" loading="lazy" decoding="async">
+  {% if caption %}<figcaption>{{ caption }}</figcaption>{% endif %}
+</figure>
+{% endif %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{# ── Taxonomy list — index of all tags ───────────────────────────────────── #}
+
+{% block title %}Tags | {{ config.title }}{% endblock %}
+{% block description %}All tags used on {{ config.title }}.{% endblock %}
+
+{% block content %}
+<div class="section-page">
+  <h1>Tags</h1>
+
+  {% if terms %}
+  <ul class="post-list">
+    {% for term in terms %}
+    <li class="post-entry">
+      <a href="{{ term.permalink }}">{{ term.name }}</a>
+      <span class="post-count">{{ term.pages | length }} post{{ term.pages | length | pluralize(singular="", plural="s") }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No tags yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

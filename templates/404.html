@@ -2,11 +2,13 @@
 
 {# ── 404 — fallback page for missing routes ──────────────────────────────── #}
 
-{% block title %}Page Not Found | {{ config.title }}{% endblock %}
+{% block title %}Page not found | {{ config.title }}{% endblock %}
 {% block description %}The page you're looking for doesn't exist.{% endblock %}
 
 {% block content %}
-<h1>404 — Not found</h1>
-<p>The page you're looking for doesn't exist.</p>
-<a href="{{ get_url(path="/") }}">Go home</a>
+<div class="page-404">
+  <h1>404</h1>
+  <p>The page you're looking for doesn't exist.</p>
+  <a href="{{ get_url(path="/") }}" class="home-link">&larr; Back home</a>
+</div>
 {% endblock %}

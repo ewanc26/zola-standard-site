@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{# ── Archive — all posts grouped by year ─────────────────────────────────── #}
+
+{% block title %}Archive | {{ config.title }}{% endblock %}
+{% block description %}All posts on {{ config.title }}, grouped by year.{% endblock %}
+{% block og_title %}Archive | {{ config.title }}{% endblock %}
+{% block og_description %}All posts on {{ config.title }}, grouped by year.{% endblock %}
+
+{% block content %}
+<div class="section-page">
+  <h1>Archive</h1>
+
+  {# Gather posts from the posts section via get_section.
+     In Zola 0.22+, the path omits the content/ prefix and _index.md suffix. #}
+  {% if section.extra.archive_source %}
+    {% set source_path = section.extra.archive_source ~ "/_index.md" %}
+    {% set source = get_section(path=source_path) %}
+  {% else %}
+    {% set source = section %}
+  {% endif %}
+
+  {% if source.pages %}
+  <div class="section-intro">
+    {{ source.pages | length }} post{{ source.pages | length | pluralize(singular="", plural="s") }}.
+  </div>
+
+  {% set_global current_year = "" %}
+  {% for page in source.pages | sort(attribute="date") | reverse %}
+    {% set year = page.date | date(format="%Y") %}
+    {% if year != current_year %}
+      {% if current_year != "" %}
+      </ul>
+      {% endif %}
+      {% set_global current_year = year %}
+      <h2 class="archive-year">{{ year }}</h2>
+      <ul class="post-list">
+    {% endif %}
+    <li class="post-entry">
+      <a href="{{ page.permalink }}">{{ page.title }}</a>
+      <time datetime="{{ page.date | date(format="%Y-%m-%dT%H:%M:%SZ") }}">
+        {{ page.date | date(format="%d %B") }}
+      </time>
+      {% if page.description %}
+      <p>{{ page.description }}</p>
+      {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+  {% else %}
+  <p>No posts yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

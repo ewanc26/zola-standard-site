@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{# ── Meta overrides ────────────────────────────────────────────────────────── #}
+{# ── Page — full blog post with ToC, reading time, prev/next nav ─────────── #}
 
 {% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
@@ -19,26 +19,15 @@
 {% endblock %}
 {% endif %}
 
-{# ─────────────────────────────────────────────────────────────────────────── #}
-{# Standard.site — document verification                                      #}
-{#                                                                            #}
-{# To link a page to its site.standard.document record, add this to the      #}
-{# page's frontmatter:                                                        #}
-{#                                                                            #}
-{#   [extra]                                                                  #}
-{#   standard_site_document_rkey = "3lwafzkjqm25s"                           #}
-{#                                                                            #}
-{# The rkey comes from the record you created on your PDS.                   #}
-{# https://standard.site/docs/verification/#document                        #}
-{# ─────────────────────────────────────────────────────────────────────────── #}
+{# ── Standard.site document verification ─────────────────────────────────── #}
 {% block standard_site_document %}
-  {% if page.extra.standard_site_document_rkey and config.extra.atproto_did %}
+  {% if page.extra.standard_site_document_rkey
+     and config.extra.atproto_did
+     and config.extra.atproto_did is not containing("YOURDIIDHERE") %}
   <link rel="site.standard.document"
         href="at://{{ config.extra.atproto_did }}/site.standard.document/{{ page.extra.standard_site_document_rkey }}">
   {% endif %}
 {% endblock %}
-
-{# ── Page body ─────────────────────────────────────────────────────────────── #}
 
 {% block content %}
 <article>
@@ -53,17 +42,24 @@
       </time>
       {% endif %}
 
-      {# Show updated date if present and different from published date #}
+      {# Reading time — estimate based on word count #}
+      {% if config.extra.show_reading_time %}
+      {% set word_count = page.content | wordcount %}
+      {% set minutes = (word_count / 200) | round(method="ceil") %}
+      {% if minutes < 1 %}{% set minutes = 1 %}{% endif %}
+      <span class="reading-time">&middot; {{ minutes }} min read</span>
+      {% endif %}
+
       {% if page.updated and page.updated != page.date %}
       <span class="updated">
-        Updated <time datetime="{{ page.updated | date(format="%Y-%m-%dT%H:%M:%SZ") }}">
+        &middot; Updated <time datetime="{{ page.updated | date(format="%Y-%m-%dT%H:%M:%SZ") }}">
           {{ page.updated | date(format="%d %B %Y") }}
         </time>
       </span>
       {% endif %}
 
-      {% if config.extra.author %}
-      <span class="author">{{ config.extra.author }}</span>
+      {% if config.extra.show_author and config.extra.author %}
+      <span class="author">&middot; {{ config.extra.author }}</span>
       {% endif %}
     </div>
 
@@ -76,16 +72,37 @@
     {% endif %}
   </header>
 
+  {# Table of Contents — auto-generated from h2/h3 headings #}
+  {% if config.extra.toc_depth and config.extra.toc_depth > 0 and page.toc %}
+  <nav class="toc" aria-label="Table of contents">
+    <h2 class="toc-title">Contents</h2>
+    <ul>
+      {% for h1 in page.toc %}
+      <li>
+        <a href="{{ h1.permalink }}">{{ h1.title }}</a>
+        {% if h1.children and config.extra.toc_depth >= 3 %}
+        <ul>
+          {% for h2 in h1.children %}
+          <li><a href="{{ h2.permalink }}">{{ h2.title }}</a></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+  {% endif %}
+
   <div class="post-content">
     {{ page.content | safe }}
   </div>
 
   <footer class="post-footer">
     {% if page.lower %}
-    <a href="{{ page.lower.permalink }}" rel="prev">← {{ page.lower.title }}</a>
+    <a href="{{ page.lower.permalink }}" rel="prev">&larr; {{ page.lower.title }}</a>
     {% endif %}
     {% if page.higher %}
-    <a href="{{ page.higher.permalink }}" rel="next">{{ page.higher.title }} →</a>
+    <a href="{{ page.higher.permalink }}" rel="next">{{ page.higher.title }} &rarr;</a>
     {% endif %}
   </footer>
 

@@ -17,22 +17,62 @@ taxonomies = [
 ]
 
 [markdown]
-highlight_code  = true
-highlight_theme = "base16-ocean-dark"
 smart_punctuation = true
+
+# Syntax highlighting via Giallo (Zola 0.22+). Pick a dark theme from:
+# https://textmate-grammars-themes.netlify.app/
+[markdown.highlighting]
+theme = "gruvbox-dark-medium"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Theme
+# ─────────────────────────────────────────────────────────────────────────────
+# This site doubles as a Zola theme. When someone forks or submodules it into
+# their themes/ directory, theme.toml provides the metadata. When used as a
+# standalone site, these settings drive the design.
+# ─────────────────────────────────────────────────────────────────────────────
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Extra — site-wide template variables
 # ─────────────────────────────────────────────────────────────────────────────
 [extra]
 
-# Site author name (used in footer and meta tags)
+# Site author name (used in post bylines and footer)
 author = "Your Name"
+
+# Show author in post bylines. Set to false to hide.
+show_author = true
+
+# Show estimated reading time on posts
+show_reading_time = true
+
+# Default colour theme from the 96-theme suite.
+# Format: {hue}-{mood}-{depth}  (hues: amber orange rose magenta violet blue teal green)
+#                                (moods: soft neutral vivid deep)
+#                                (depths: dim dark darker)
+theme_default = "amber-soft-dark"
+
+# Table of contents depth for posts (0 = disabled, 2-4 = heading levels)
+toc_depth = 2
 
 # Optional nav links rendered in the site header
 nav_items = [
   { name = "Posts", url = "/posts" },
+  { name = "Archive", url = "/archive" },
   { name = "About", url = "/about" },
+]
+
+# Default Open Graph image for social shares. Replace with your own.
+# Use a full URL (https://...) for social platforms to resolve it.
+og_image = ""
+
+# Social links shown in the footer. Remove or comment out any you don't need.
+socials = [
+  # { name = "GitHub",   url = "https://github.com/", icon = "github" },
+  # { name = "Mastodon", url = "https://", icon = "mastodon" },
+  # { name = "Bluesky",  url = "https://", icon = "bluesky" },
+  # { name = "Twitter",  url = "https://", icon = "twitter" },
+  # { name = "Email",    url = "mailto:",  icon = "email" },
 ]
 
 # ─────────────────────────────────────────────────────────────────────────────

@@ -1,0 +1,13 @@
+{# YouTube embed. Usage: {{ youtube(id="dQw4w9WgXcQ") }} #}
+{% if id %}
+<div class="video-embed">
+  <iframe
+    src="https://www.youtube-nocookie.com/embed/{{ id }}"
+    title="YouTube video"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+    loading="lazy"
+  ></iframe>
+</div>
+{% endif %}

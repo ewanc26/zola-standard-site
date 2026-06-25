@@ -1,0 +1,5 @@
+{# Callout/notice shortcode. Usage: {{ callout(type="note|warning|tip", title="") }} content {{ callout_end() }} #}
+<aside class="callout callout-{{ type | default(value="note") }}" role="note">
+  {% if title %}<p class="callout-title">{{ title }}</p>{% endif %}
+  {{ body | safe }}
+</aside>

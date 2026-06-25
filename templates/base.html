@@ -4,75 +4,217 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  {# ── Title ────────────────────────────────────────────────────────────── #}
+  {# ── Fonts — Inter (prose/UI) + JetBrains Mono (code/metadata) ─────────── #}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap">
+
+  {# ── Stylesheets ───────────────────────────────────────────────────────── #}
+  <link rel="stylesheet" href="{{ get_url(path="css/dark-study.css") }}">
+  <link rel="stylesheet" href="{{ get_url(path="css/themes-64.css") }}">
+
+  {# ── Title ──────────────────────────────────────────────────────────────── #}
   <title>{% block title %}{{ config.title }}{% endblock %}</title>
 
-  {# ── Description ──────────────────────────────────────────────────────── #}
+  {# ── Description ────────────────────────────────────────────────────────── #}
   <meta name="description" content="{% block description %}{{ config.description }}{% endblock %}">
 
-  {# ── Open Graph ───────────────────────────────────────────────────────── #}
+  {# ── Open Graph ─────────────────────────────────────────────────────────── #}
   <meta property="og:title"       content="{% block og_title %}{{ config.title }}{% endblock %}">
   <meta property="og:description" content="{% block og_description %}{{ config.description }}{% endblock %}">
   <meta property="og:type"        content="{% block og_type %}website{% endblock %}">
   <meta property="og:url"         content="{% block og_url %}{{ config.base_url }}{% endblock %}">
-  {% block og_image %}{% endblock %}
+  {% block og_image %}
+  {% if config.extra.og_image %}
+  <meta property="og:image" content="{{ config.extra.og_image | safe }}">
+  {% endif %}
+  {% endblock %}
 
-  {# ── Feed ─────────────────────────────────────────────────────────────── #}
+  {# ── Feed ───────────────────────────────────────────────────────────────── #}
   {% if config.generate_feeds %}
   <link rel="alternate" type="application/atom+xml"
         title="{{ config.title }}" href="{{ get_url(path="atom.xml") }}">
   {% endif %}
 
-  {# ─────────────────────────────────────────────────────────────────────── #}
-  {# Standard.site — AT Protocol long-form publishing integration           #}
-  {# https://standard.site/docs/verification/                               #}
-  {# ─────────────────────────────────────────────────────────────────────── #}
+  {# ───────────────────────────────────────────────────────────────────────── #}
+  {# Standard.site — AT Protocol long-form publishing integration             #}
+  {# All link tags degrade gracefully when config values are placeholders.    #}
+  {# https://standard.site/docs/verification/                                 #}
+  {# ───────────────────────────────────────────────────────────────────────── #}
 
-  {# Publication discovery hint (optional; verification is via /.well-known) #}
+  {# Publication discovery hint (optional; verification is via /.well-known)   #}
   {% if config.extra.standard_site_discovery_hint
-     and config.extra.standard_site_publication_at_uri %}
+     and config.extra.standard_site_publication_at_uri
+     and config.extra.atproto_did is defined
+     and config.extra.atproto_did is not containing("YOURDIIDHERE") %}
   <link rel="site.standard.publication"
         href="{{ config.extra.standard_site_publication_at_uri }}">
   {% endif %}
 
-  {# Document verification link — emitted per-page by page.html / section.html #}
+  {# Document verification link — emitted per-page by page.html               #}
   {% block standard_site_document %}{% endblock %}
 
-  {# ── Stylesheet ───────────────────────────────────────────────────────── #}
-  {% block stylesheets %}{% endblock %}
-
-  {# ── Extra head content ───────────────────────────────────────────────── #}
+  {# ── Extra head content ─────────────────────────────────────────────────── #}
   {% block head %}{% endblock %}
 </head>
 <body>
 
-  {# ── Site header ──────────────────────────────────────────────────────── #}
-  {% block header %}
-  <header>
-    <a href="{{ get_url(path="/") }}" class="site-title">{{ config.title }}</a>
-    {% if config.extra.nav_items %}
-    <nav aria-label="Main navigation">
-      {% for item in config.extra.nav_items %}
-      <a href="{{ item.url }}">{{ item.name }}</a>
-      {% endfor %}
-    </nav>
-    {% endif %}
-  </header>
-  {% endblock %}
+  {# ── Skip link ──────────────────────────────────────────────────────────── #}
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
-  {# ── Main content ─────────────────────────────────────────────────────── #}
-  <main>
-    {% block content %}{% endblock %}
-  </main>
+  <div class="site-wrapper">
 
-  {# ── Footer ───────────────────────────────────────────────────────────── #}
-  {% block footer %}
-  <footer>
-    <p>&copy; {{ now() | date(format="%Y") }} {{ config.extra.author | default(value=config.title) }}</p>
-  </footer>
-  {% endblock %}
+    {# ── Site header ──────────────────────────────────────────────────────── #}
+    {% block header %}
+    <header class="site-header">
+      <a href="{{ get_url(path="/") }}" class="site-title">{{ config.title }}</a>
+      {% if config.extra.nav_items %}
+      <nav aria-label="Main navigation">
+        <ul class="site-nav">
+          {% for item in config.extra.nav_items %}
+          <li><a href="{{ item.url }}"
+            {% if current_path and current_path is starting_with(item.url) %}aria-current="page"{% endif %}
+          >{{ item.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </nav>
+      {% endif %}
+    </header>
+    {% endblock %}
+
+    {# ── Main content ─────────────────────────────────────────────────────── #}
+    <main id="main-content" class="site-main">
+      {% block content %}{% endblock %}
+    </main>
+
+    {# ── Footer ───────────────────────────────────────────────────────────── #}
+    {% block footer %}
+    <footer class="site-footer">
+      {# Theme picker #}
+      <div class="theme-picker">
+        <div class="theme-picker-row" id="theme-row-mono" role="radiogroup" aria-label="Theme"></div>
+        <span class="theme-picker-label" id="theme-label-mono"></span>
+      </div>
+
+      {% if config.extra.socials %}
+      <nav class="footer-socials" aria-label="Social links">
+        {% for social in config.extra.socials %}
+        <a href="{{ social.url }}" rel="me" title="{{ social.name }}" class="social-link">
+          {% if social.icon == "github" %}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          {% elif social.icon == "mastodon" %}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.6 13.9c-.3 1.5-2.6 3.2-5.3 3.5-1.4.2-2.8.3-4.3.3-1.5 0-2.9-.1-4.3-.3-2.7-.3-5-2-5.3-3.5-.2-1-.3-3.4 0-5.7.5-4.2 3.7-5.4 3.7-5.4C7.2 3 7.9 2.9 12 2.9s4.9.1 5.9.9c0 0 3.3 1.2 3.7 5.4.3 2.3.2 4.7 0 5.7Z"/><path d="M18.3 8.1v6.3h-1.6V8.1c0-.9-.4-1.2-1.1-1.2-.8 0-1.2.5-1.2 1.5v2.2h-1.5v-2.2c0-1-.4-1.5-1.2-1.5-.7 0-1.1.4-1.1 1.2v6.3H8.9V8.1c0-.9.3-1.6.7-2.2.5-.5 1.1-.8 1.9-.8.9 0 1.6.4 2 1.1l.4.7.4-.7c.5-.8 1.1-1.1 2-1.1.8 0 1.5.3 1.9.8.5.6.7 1.3.7 2.2Z"/></svg>
+          {% elif social.icon == "bluesky" %}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 10.8c-1.1-2.4-4.8-6.8-8-8.8-1-.6-2.6-.8-3 .4C.3 4.3.6 9.6 2.2 11.5c1.6 1.8 4.4 2.5 7 2.2-1.5 1.8-3.4 5.5-1.8 8.3 2.7 4.6 5.9-1.2 5.9-1.2 0 .1 3.2 5.8 5.9 1.2 1.7-2.8-.3-6.5-1.8-8.3 2.6.3 5.4-.4 7-2.2 1.6-1.9 1.9-7.2 1.2-9.2-.4-1.2-2-.9-3-.4-3.2 2-6.9 6.4-8 8.8Z"/></svg>
+          {% elif social.icon == "twitter" %}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          {% elif social.icon == "email" %}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          {% else %}
+          {{ social.name }}
+          {% endif %}
+        </a>
+        {% endfor %}
+      </nav>
+      {% endif %}
+
+      <p>
+        &copy; {{ now() | date(format="%Y") }} {{ config.extra.author | default(value=config.title) }}
+        {% if config.generate_feeds %}
+        &middot; <a href="{{ get_url(path="atom.xml") }}">Feed</a>
+        {% endif %}
+      </p>
+    </footer>
+    {% endblock %}
+
+    {# Back to top — CSS-only, no JS #}
+    <a href="#" class="back-to-top" title="Back to top" aria-label="Back to top">&uarr;</a>
+
+  </div>{# /.site-wrapper #}
 
   {% block scripts %}{% endblock %}
 
+  {# Code copy button — lightweight inline JS, no dependencies #}
+  <script>
+  (function(){
+    var blocks=document.querySelectorAll('pre code');
+    blocks.forEach(function(code){
+      var pre=code.parentElement;
+      var btn=document.createElement('button');
+      btn.className='code-copy-btn';
+      btn.setAttribute('aria-label','Copy code');
+      btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+      btn.addEventListener('click',function(){
+        navigator.clipboard.writeText(code.textContent||'').then(function(){
+          btn.classList.add('copied');
+          setTimeout(function(){btn.classList.remove('copied');},2000);
+        });
+      });
+      pre.style.position='relative';
+      pre.appendChild(btn);
+    });
+  })();
+  </script>
+
+  {# Theme picker — 8 dots, each cycles 8 variants = 64 themes #}
+  <script>
+  (function(){
+    var STORAGE = 'theme';
+    var DEF     = '{{ config.extra.theme_default | default(value="amber-soft-dark") }}';
+    var html    = document.documentElement;
+
+    var HUES  = ['amber','orange','rose','magenta','violet','blue','teal','green'];
+    var STEPS = ['soft-dim','soft-dark','soft-darker','neutral-dim','neutral-dark','neutral-darker','vivid-dim','vivid-dark','vivid-darker','deep-dim','deep-dark','deep-darker'];
+    var COLOR = {amber:'#d4a040',orange:'#d49140',rose:'#c97a8b',magenta:'#c97ac9',violet:'#9180d4',blue:'#6090c0',teal:'#60b0a0',green:'#6aae6a'};
+
+    var saved  = localStorage.getItem(STORAGE) || DEF;
+    var dash   = saved.indexOf('-');
+    var curHue = saved.slice(0,dash);
+    var curStep = STEPS.indexOf(saved.slice(dash+1));
+    if (curStep < 0) curStep = 0;
+
+    var stepAt = {};
+    HUES.forEach(function(h){ stepAt[h] = (h===curHue ? curStep : 0); });
+
+    function key(h,s){ return h+'-'+STEPS[s]; }
+
+    function apply(h,s){
+      var k = key(h,s);
+      html.setAttribute('data-theme', k);
+      localStorage.setItem(STORAGE, k);
+      curHue=h; curStep=s;
+      updateUI(h);
+    }
+
+    function updateUI(h){
+      document.querySelectorAll('.theme-dot').forEach(function(d){
+        var on = d.dataset.themeHue===h;
+        d.classList.toggle('active',on);
+        d.setAttribute('aria-checked',on?'true':'false');
+        d.style.background = COLOR[d.dataset.themeHue];
+      });
+      document.getElementById('theme-label-mono').textContent = STEPS[stepAt[h]];
+    }
+
+    var row = document.getElementById('theme-row-mono');
+    HUES.forEach(function(h){
+      var b = document.createElement('button');
+      b.className = 'theme-dot';
+      b.dataset.themeHue = h;
+      b.setAttribute('role','radio');
+      b.title = h;
+      b.addEventListener('click', function(){
+        var h2 = this.dataset.themeHue;
+        if (h2===curHue) stepAt[h2] = (stepAt[h2]+1) % STEPS.length;
+        apply(h2, stepAt[h2]);
+      });
+      row.appendChild(b);
+    });
+
+    html.setAttribute('data-theme', saved);
+    updateUI(curHue);
+  })();
+  </script>
 </body>
 </html>

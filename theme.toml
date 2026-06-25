@@ -1,0 +1,19 @@
+name = "dark-study"
+description = "A quiet, literary Zola theme for long-form publishing on AT Protocol. Dark reading surface, single humanist sans-serif, committed typography. Implements the standard.site lexicons for AT Protocol discovery."
+license = "AGPL-3.0"
+homepage = "https://github.com/ewanc26/zola-standard-site"
+min_version = "0.19.0"
+demo = ""
+
+[extra]
+# Set to true to show the author name in post bylines and footer
+show_author = true
+
+[author]
+name = ""
+homepage = ""
+
+[original]
+author = ""
+homepage = ""
+repo = "https://github.com/getzola/themes"
