@@ -148,7 +148,7 @@ theme = "gruvbox-dark-medium"
 
 This theme is wired for [Sequoia](https://sequoia.pub), the CLI that publishes static Markdown blogs to AT Protocol.
 
-![Sequoia handshake](static/sequoia-handshake.png)
+![Sequoia handshake](static/sequoia-homepage.png)
 
 The handshake:
 
