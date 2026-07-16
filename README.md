@@ -41,7 +41,7 @@ Open `http://127.0.0.1:1111`. The site works immediately — all AT Protocol fie
 
 ```
 .
-├── config.toml              # Site config + theme extras + ATProto fields
+├── config.toml              # Site config + theme extras + atproto fields
 ├── theme.toml               # Theme metadata (makes this a redistributable theme)
 ├── content/
 │   ├── _index.md            # Homepage
@@ -162,7 +162,7 @@ The handshake:
 # Install and init (creates sequoia.json, registers publication)
 npx sequoia-cli init
 
-# Fill in config.toml ATProto fields with values from sequoia.json
+# Fill in config.toml atproto fields with values from sequoia.json
 # atproto_did → your DID
 # standard_site_publication_at_uri → publicationUri from sequoia.json
 
