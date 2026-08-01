@@ -216,6 +216,13 @@ All colour tokens are CSS custom properties under `[data-theme="name"]` selector
 
 See `DESIGN.md` for the full visual system (Stitch format with YAML frontmatter). See `PRODUCT.md` for the strategic brief. The design language is drawn from the Croft ecosystem: devlog (colour), faol-website (elevation, tags), inkwell (typography, motion), website (tokens).
 
+## Support
+
+If you find this project useful, consider supporting its development:
+
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/ewancroft)
+[![GitHub Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-30363D?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sponsors/ewanc26)
+
 ## License
 
 AGPL-3.0
