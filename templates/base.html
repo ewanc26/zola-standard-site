@@ -47,7 +47,7 @@
   {% if config.extra.standard_site_discovery_hint
      and config.extra.standard_site_publication_at_uri
      and config.extra.atproto_did is defined
-     and config.extra.atproto_did is not containing("YOURDIIDHERE") %}
+     and not config.extra.atproto_did is containing("YOURDIIDHERE") %}
   <link rel="site.standard.publication"
         href="{{ config.extra.standard_site_publication_at_uri }}">
   {% endif %}
@@ -124,6 +124,11 @@
         {% if config.generate_feeds %}
         &middot; <a href="{{ get_url(path="atom.xml") }}">Feed</a>
         {% endif %}
+      </p>
+
+      <p>
+        Support: <a href="https://ko-fi.com/ewancroft">Ko-fi</a>
+        &middot; <a href="https://github.com/sponsors/ewanc26">GitHub Sponsors</a>
       </p>
     </footer>
     {% endblock %}
