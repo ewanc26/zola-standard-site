@@ -23,7 +23,7 @@
 {% block standard_site_document %}
   {% if page.extra.standard_site_document_rkey
      and config.extra.atproto_did
-     and not config.extra.atproto_did is containing("YOURDIIDHERE") %}
+     and config.extra.atproto_did is not containing(pat="YOURDIIDHERE") %}
   <link rel="site.standard.document"
         href="at://{{ config.extra.atproto_did }}/site.standard.document/{{ page.extra.standard_site_document_rkey }}">
   {% endif %}
