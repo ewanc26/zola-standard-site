@@ -13,11 +13,11 @@
 {% block og_type %}article{% endblock %}
 {% block og_url %}{{ page.permalink }}{% endblock %}
 
-{% if page.extra.og_image %}
 {% block og_image %}
+{% if page.extra.og_image %}
 <meta property="og:image" content="{{ page.extra.og_image }}">
-{% endblock %}
 {% endif %}
+{% endblock %}
 
 {# ── Standard.site document verification ─────────────────────────────────── #}
 {% block standard_site_document %}
