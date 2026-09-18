@@ -47,7 +47,7 @@
   {% if config.extra.standard_site_discovery_hint
      and config.extra.standard_site_publication_at_uri
      and config.extra.atproto_did is defined
-     and not config.extra.atproto_did is containing("YOURDIIDHERE") %}
+     and config.extra.atproto_did is not containing(pat="YOURDIIDHERE") %}
   <link rel="site.standard.publication"
         href="{{ config.extra.standard_site_publication_at_uri }}">
   {% endif %}
@@ -74,7 +74,7 @@
         <ul class="site-nav">
           {% for item in config.extra.nav_items %}
           <li><a href="{{ item.url }}"
-            {% if current_path and current_path is starting_with(item.url) %}aria-current="page"{% endif %}
+            {% if current_path and current_path is starting_with(pat=item.url) %}aria-current="page"{% endif %}
           >{{ item.name }}</a></li>
           {% endfor %}
         </ul>
