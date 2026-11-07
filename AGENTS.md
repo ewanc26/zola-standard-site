@@ -20,4 +20,4 @@ a Zola theme with standard.site support
 
 ## Recent history
 
-Sync AGENTS.md from zincfox; Sync AGENTS.md from zincfox; Sync CONTRIBUTING.md from zincfox; Sync CONTRIBUTING.md from zincfox; Fix Zola build and integrate local site updates (#1)
+Fix Zola build and integrate local site updates (#1)

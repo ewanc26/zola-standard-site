@@ -16,4 +16,4 @@ a Zola theme with standard.site support
 
 ## Recent direction
 
-Recent commits: Sync AGENTS.md from zincfox; Sync AGENTS.md from zincfox; Sync CONTRIBUTING.md from zincfox; Sync CONTRIBUTING.md from zincfox; Fix Zola build and integrate local site updates (#1)
+Recent commits: Fix Zola build and integrate local site updates (#1)
