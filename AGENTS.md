@@ -4,9 +4,9 @@ Guidance for AI coding agents working in **zola-standard-site**.
 
 ## Project overview
 
-A Zola theme with standard.site support
+a Zola theme with standard.site support
 
-- Language: Markdown
+- Language: CSS
 - Default branch: main
 
 ## Working rules
