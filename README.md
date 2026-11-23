@@ -232,6 +232,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and the checks required 
 
 AGPL-3.0
 
+Copyright (C) 2026 Ewan Croft (ewanc26).
+
 ## Star History
 
 <a href="https://www.star-history.com/?repos=ewanc26%2Fzola-standard-site&type=date&legend=bottom-right">
