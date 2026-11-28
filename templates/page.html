@@ -13,17 +13,19 @@
 {% block og_type %}article{% endblock %}
 {% block og_url %}{{ page.permalink }}{% endblock %}
 
-{% if page.extra.og_image %}
 {% block og_image %}
+{% if page.extra.og_image %}
 <meta property="og:image" content="{{ page.extra.og_image }}">
-{% endblock %}
+{% elif config.extra.og_image %}
+<meta property="og:image" content="{{ config.extra.og_image | safe }}">
 {% endif %}
+{% endblock %}
 
 {# ── Standard.site document verification ─────────────────────────────────── #}
 {% block standard_site_document %}
   {% if page.extra.standard_site_document_rkey
      and config.extra.atproto_did
-     and not config.extra.atproto_did is containing("YOURDIIDHERE") %}
+     and not config.extra.atproto_did is containing(pat="YOURDIIDHERE") %}
   <link rel="site.standard.document"
         href="at://{{ config.extra.atproto_did }}/site.standard.document/{{ page.extra.standard_site_document_rkey }}">
   {% endif %}
